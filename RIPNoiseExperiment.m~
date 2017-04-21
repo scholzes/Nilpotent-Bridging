@@ -2,7 +2,7 @@ n = 250;
 N = 1000;
 snr = .05;
 Trials = 50;
-EC = [10:10:250];
+EC = [10:10:100];
 
 Data = zeros(Trials,length(EC));
 Data2 = zeros(Trials,length(EC));
