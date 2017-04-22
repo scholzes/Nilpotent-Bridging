@@ -56,8 +56,7 @@ FC(L) = C' * (FC(W) - FRCB) + FRCL;
 
 % We reconstruct the signal.
 
-g = f_R;
-g = g + F(:,L) * FC(L);
+g = f_R + F(:,L) * FC(L);
 
 % We compute the \ell^2 norm of the reconstruction
 % error.
