@@ -6,7 +6,7 @@ fprintf('Reading Image \n');
 
 COMPRESSION_PERCENT = 0.10; % Compressed Signal will be approximately
 % n = 256^2 * COMPRESSION_PERCENT dimensional.
-snr = .00;
+snr = .05;
 percenterasures = .05;
 
 Original_Image_Double = double(imread('Lena.bmp'));
@@ -22,7 +22,7 @@ Compressed_Image_Double(I(n+1:256*256)) = [];
 N = 2*n;
 Lsize = round(percenterasures*N);
 L = [1:Lsize];
-W = [Lsize+1:;2*Lsize];
+W = [Lsize+1:3*Lsize];
 LC = setdiff(1:N,L);
 
 f = Compressed_Image_Double;
@@ -32,23 +32,23 @@ fprintf('Creating Frames \n');
 A = randn(N,n);
 [A,~] = qr(A,0);
 
-F = sqrt(N/n)*A(:,1:n)';
-G = (n/N)*DF;
+F = sqrt(N/n)*A';
+G = (n/N)*F;
 
 fprintf('Reconstructing Erasures \n');
 
 FC = G' * f;
 FC(L) = zeros(size(L'));
-FC1 = FC;
+noise = randn(size(LC'));
+noise = snr * noise ./ norm(noise) * norm(FC(LC));
+FC(LC) = FC(LC) + noise;
 f_R = F*FC;
 
-% noise = randn(N,1);
-% noise = snr * noise ./ norm(noise) * norm(FC(LC));
-% FC = FC + noise;
+
 
 FRCL = G(:,L)' * f_R;
 FRCB = G(:,W)' * f_R;
-C = (F(:,L)'*G(:,W))\(F(:,L)'*G(:,L));
+C = pinv(F(:,L)'*G(:,W))*(F(:,L)'*G(:,L));
 FC(L) = C' * (FC(W) - FRCB) + FRCL;
 g = f_R + F(:,L) * FC(L);
 
