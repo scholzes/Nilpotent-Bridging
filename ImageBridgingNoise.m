@@ -4,7 +4,7 @@ clc;
 
 fprintf('Reading Image \n');
 
-COMPRESSION_PERCENT = 0.10; % Compressed Signal will be approximately
+COMPRESSION_PERCENT = 0.08; % Compressed Signal will be approximately
 % n = 256^2 * COMPRESSION_PERCENT dimensional.
 percenterasures = [.01, .02, .03, .04, .05];
 
@@ -58,7 +58,7 @@ for(j = 1:1:length(percenterasures))
     noise = randn(size(LC'));
     noise = noise / norm(noise) * snr * norm(FC(LC));
     FC(LC) = FC(LC) + noise;
-    FC1 = FC
+    FC1 = FC;
     f_R = F*FC;
 
     FRCL = G(:,L)' * f_R;
