@@ -50,7 +50,7 @@ for(j = 1:1:length(percenterasures))
     Lsize = round(percenterasures(j)*N);
     L = [1:Lsize];
     W = [Lsize+1:2*Lsize];
-    W1 = [Lsize+1:3*Lsize];
+    W1 = [Lsize+1:round(2.5*Lsize)];
     LC = setdiff(1:N,L);
 
     FC = G' * f;
@@ -86,7 +86,7 @@ for(j = 1:1:length(percenterasures))
     Uncompressed_g = reshape(Uncompressed_g,[256,256]);
     J_g = uint8(Uncompressed_g);
 
-    C_g1 = zeros(256*256,1); % Reconstructed Image Doubly Bridged.
+    C_g1 = zeros(256*256,1); % Reconstructed Image Over-Bridged.
     C_g1(I1(1:n)) = g1;
     Uncompressed_g1 = ifft(C_g1);
     Uncompressed_g1 = reshape(Uncompressed_g1,[256,256]);
