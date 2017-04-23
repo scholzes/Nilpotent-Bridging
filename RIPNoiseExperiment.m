@@ -6,25 +6,26 @@ EC = [10:10:250];
 
 Data = zeros(Trials,length(EC));
 Data2 = zeros(Trials,length(EC));
+Data3 = zeros(Trials,length(EC));
 
 for(k=1:1:length(EC))
     
     L = [1:1:EC(k)];
-    W = [EC(k)+1:1:2.5*EC(k)];
+    W = [EC(k)+1:1:3*EC(k)];
     LC = setdiff(1:N,L);
     
     for(t = 1:1:Trials)
         
-        A = randn(N,n);
-        [A,~] = qr(A,0);
-        F = sqrt(N/n)*A(:,1:n)';
+        F = randn(N,n);
+        [F,~] = qr(F,0);
+        F = sqrt(N/n)*F(:,1:n)';
         G = (n/N)*F;
         
         f = randn(n,1);
-        f = f./norm(f,2);
+        f = f./norm(f);
         
         FC = G' * f;
-        noise = randn(length(LC),1);
+        noise = randn(size(LC'));
         noise = snr * norm(FC(LC))/norm(noise) * noise;
         FC(LC) = FC(LC) + noise;
         FC(L) = zeros(size(L'));

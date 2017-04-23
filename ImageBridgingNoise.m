@@ -4,20 +4,20 @@ clc;
 
 fprintf('Reading Image \n');
 
-COMPRESSION_PERCENT = 0.08; % Compressed Signal will be approximately
+COMPRESSION_PERCENT = 0.15; % Compressed Signal will be approximately
 % n = 256^2 * COMPRESSION_PERCENT dimensional.
 percenterasures = [.01, .02, .03, .04, .05];
 
-Original_Image_Double = double(imread('Pepper.bmp'));
+Original_Image_Double = double(imread('Lena.bmp'));
 
 fprintf('Performing Image Compression \n')
 
 Compressed_Image_Double = fft(reshape(Original_Image_Double,[256*256,1]));
 [S,I] = sort(abs(Compressed_Image_Double),'descend');
-n = round(COMPRESSION_PERCENT*256*256);
+n = round(COMPRESSION_PERCENT*256*256)
 Compressed_Image_Double(I(n+1:256*256)) = [];
 
-N = 2*n;
+N = 2*n
 snr = .05;
 
 f = Compressed_Image_Double;
@@ -63,6 +63,7 @@ for(j = 1:1:length(percenterasures))
 
     FRCL = G(:,L)' * f_R;
     FRCB = G(:,W)' * f_R;
+    condy = cond(F(:,L)'*G(:,W))
     C = (F(:,L)'*G(:,W))\(F(:,L)'*G(:,L));
     FC(L) = C' * (FC(W) - FRCB) + FRCL;
     g = f_R + F(:,L) * FC(L);
@@ -101,6 +102,6 @@ for(j = 1:1:length(percenterasures))
 
     subplot(4,5,15+j);
     imshow(J_g1);
-    title('Reconstructed with Noise \n Doubly Bridged');
+    title('Reconstructed with Noise Doubly Bridged');
 
 end
