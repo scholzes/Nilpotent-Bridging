@@ -6,7 +6,6 @@ EC = [10:10:250];
 
 Data = zeros(Trials,length(EC));
 Data2 = zeros(Trials,length(EC));
-Data3 = zeros(Trials,length(EC));
 
 for(k=1:1:length(EC))
     
@@ -33,7 +32,7 @@ for(k=1:1:length(EC))
         
         FRCL = G(:,L)' * f_R;
         FRCB = G(:,W)' * f_R;
-        C = pinv(F(:,L)'*G(:,W))*(F(:,L)'*G(:,L));
+        C = (F(:,L)'*G(:,W))\(F(:,L)'*G(:,L));
         FC(L) = C' * (FC(W) - FRCB) + FRCL;
         g = f_R + F(:,L) * FC(L);
         

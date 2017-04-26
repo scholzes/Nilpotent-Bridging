@@ -41,29 +41,29 @@ Uncompressed_f = ifft(C_f);
 Uncompressed_f = reshape(Uncompressed_f,[256,256]);
 J_f = uint8(Uncompressed_f);
 
-subplot(4,5,3);
-imshow(J_f);
-title('Compressed Image');
+% subplot(4,5,3);
+% imshow(J_f);
+% title('Compressed Image');
 
 for(j = 1:1:length(percenterasures))
 
     Lsize = round(percenterasures(j)*N);
     L = [1:Lsize];
     W = [Lsize+1:2*Lsize];
-    W1 = [Lsize+1:round(2.5*Lsize)];
+    W1 = [Lsize+1:round(3*Lsize)];
     LC = setdiff(1:N,L);
 
     FC = G' * f;
-    FC(L) = zeros(size(L'));
     noise = randn(size(LC'));
     noise = noise / norm(noise) * snr * norm(FC(LC));
     FC(LC) = FC(LC) + noise;
+    FC2 = FC;
+    FC(L) = zeros(size(L'));
     FC1 = FC;
     f_R = F*FC;
 
     FRCL = G(:,L)' * f_R;
     FRCB = G(:,W)' * f_R;
-    condy = cond(F(:,L)'*G(:,W))
     C = (F(:,L)'*G(:,W))\(F(:,L)'*G(:,L));
     FC(L) = C' * (FC(W) - FRCB) + FRCL;
     g = f_R + F(:,L) * FC(L);
@@ -73,14 +73,22 @@ for(j = 1:1:length(percenterasures))
     C1 = pinv(F(:,L)'*G(:,W1))*(F(:,L)'*G(:,L));
     FC1(L) = C1' * (FC1(W1) - FRCB1) + FRCL1;
     g1 = f_R + F(:,L) * FC1(L);
+    
+    g2 = F * FC2;
 
+    C_g2 = zeros(256*256,1); % Just Noise.
+    C_g2(I1(1:n)) = g2;
+    Uncompressed_g2 = ifft(C_g2);
+    Uncompressed_g2 = reshape(Uncompressed_g2,[256,256]);
+    J_g2 = uint8(Uncompressed_g2);
+    
     C_f_R = zeros(256*256,1); % Erased Image with noise.
     C_f_R(I1(1:n)) = f_R;
     Uncompressed_f_R = ifft(C_f_R);
     Uncompressed_f_R = reshape(Uncompressed_f_R,[256,256]);
     J_f_R = uint8(Uncompressed_f_R);
 
-    C_g = zeros(256*256,1); % Reconstructed Image.
+    C_g = zeros(256*256,1); % Reconstructed Image, Single Bridge.
     C_g(I1(1:n)) = g;
     Uncompressed_g = ifft(C_g);
     Uncompressed_g = reshape(Uncompressed_g,[256,256]);
@@ -92,6 +100,10 @@ for(j = 1:1:length(percenterasures))
     Uncompressed_g1 = reshape(Uncompressed_g1,[256,256]);
     J_g1 = uint8(Uncompressed_g1);
 
+    subplot(4,5,j);
+    imshow(J_g2);
+    title('Noisy Image');
+    
     subplot(4,5,5+j);
     imshow(J_f_R);
     title('Erased Image with Noise');
